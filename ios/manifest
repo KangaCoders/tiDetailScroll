@@ -1,0 +1,18 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 1.0.0
+apiversion: 2
+description: My module
+author: Kai De Sutter
+license: Specify your license
+copyright: 2014 KangaCoders
+
+
+# these should not be edited
+name: tiDetailScroll
+moduleid: com.kangacoders.tidetailscroll
+guid: 51f0dc7e-8720-4b26-a863-1711450be854
+platform: iphone
+minsdk: 3.2.2.GA

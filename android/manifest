@@ -1,0 +1,18 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 1.0.0
+apiversion: 2
+description: My module
+author: KangaCoders Ltd.
+license: Specify your license
+copyright: 2014 KangaCoders Ltd.
+
+
+# these should not be edited
+name: tidetailscroll
+moduleid: com.kangacoders.tidetailscroll
+guid: 2175d710-0f46-4cb0-87bd-b9671a9f0246
+platform: android
+minsdk: 3.2.2.GA
