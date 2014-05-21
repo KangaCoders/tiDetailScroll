@@ -8,55 +8,78 @@
  */
 package com.kangacoders.tidetailscroll;
 
+import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
 
 import org.appcelerator.titanium.TiApplication;
-import org.appcelerator.kroll.common.Log;
+import org.appcelerator.titanium.proxy.TiViewProxy;
+import org.appcelerator.titanium.util.TiConvert;
 
-@Kroll.module(name="Tidetailscroll", id="com.kangacoders.tidetailscroll")
-public class TidetailscrollModule extends KrollModule
-{
+import android.app.Activity;
+import android.util.DisplayMetrics;
+
+import com.kangacoders.tidetailscroll.KangaScrollView.TiVerticalScrollView;
+
+@Kroll.module(name = "Tidetailscroll", id = "com.kangacoders.tidetailscroll")
+public class TidetailscrollModule extends KrollModule implements
+		ScrollViewListener {
 
 	// Standard Debugging variables
 	private static final String TAG = "TidetailscrollModule";
 
+	private static DisplayMetrics metrics = new DisplayMetrics();
+
+	private KangaScrollViewProxy scroll_view;
+	private TiViewProxy resize_view;
+	private TiViewProxy blur_view;
+	private Float minimum;
+	private Float maximum;
+
 	// You can define constants with @Kroll.constant, for example:
 	// @Kroll.constant public static final String EXTERNAL_NAME = value;
-	
-	public TidetailscrollModule()
-	{
+
+	public TidetailscrollModule() {
 		super();
 	}
 
 	@Kroll.onAppCreate
-	public static void onAppCreate(TiApplication app)
-	{
-		Log.d(TAG, "inside onAppCreate");
-		// put module init code that needs to run when the application is created
+	public static void onAppCreate(TiApplication app) {
+		
 	}
 
 	// Methods
 	@Kroll.method
-	public String example()
-	{
-		Log.d(TAG, "example called");
-		return "hello world";
-	}
-	
-	// Properties
-	@Kroll.getProperty
-	public String getExampleProp()
-	{
-		Log.d(TAG, "get example property");
-		return "hello world";
-	}
-	
-	
-	@Kroll.setProperty
-	public void setExampleProp(String value) {
-		Log.d(TAG, "set example property: " + value);
+	public void bind_views(KrollDict _params) {
+		TiApplication appContext = TiApplication.getInstance();
+		Activity activity = appContext.getCurrentActivity();
+		activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		
+		scroll_view = (KangaScrollViewProxy) _params.get("scroll_view");
+		resize_view = (TiViewProxy) _params.get("resize_view");
+		minimum = TiConvert.toFloat(_params.get("minimum"));
+		maximum = TiConvert.toFloat(_params.get("maximum"));
+
+		if (_params.get("resize_view") != null) {
+			blur_view = (TiViewProxy) _params.get("blur_wrapper");
+		}
+
+		TiVerticalScrollView _scroll_view = (TiVerticalScrollView) scroll_view
+				.getNativeView();
+
+		_scroll_view.setScrollViewListener(this);
 	}
 
+	public void onScrollChanged(TiVerticalScrollView scrollView, int x, int y,
+			int oldx, int oldy) {
+		
+		float _new_height = maximum - y / metrics.density;
+
+		if (_new_height >= minimum && _new_height <= maximum) {
+			resize_view.setHeight(_new_height);
+			blur_view.getOrCreateView().setOpacity(
+					(float) (((maximum - minimum) - (_new_height - minimum))
+							/ (maximum - minimum) * 1.0));
+		}
+	}
 }
-

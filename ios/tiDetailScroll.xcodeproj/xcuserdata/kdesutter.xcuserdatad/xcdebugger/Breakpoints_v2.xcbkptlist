@@ -29,7 +29,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "162"
             endingLineNumber = "162"
-            landmarkName = "-fade_blur:"
+            landmarkName = "-resize_view:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
